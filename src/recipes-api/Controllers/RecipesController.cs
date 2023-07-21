@@ -58,15 +58,20 @@ public class RecipesController : ControllerBase
             recipes.UpdateRecipe(recipe);
             return new ObjectResult(recipe) { StatusCode = StatusCodes.Status204NoContent };
         }
-        return new ObjectResult(recipe) { StatusCode = StatusCodes.Status400BadRequest };
-        
-
+        return new ObjectResult(recipe) { StatusCode = StatusCodes.Status400BadRequest };    
     }
 
     // 5 - Sua aplicação deve ter o endpoint DEL /recipe
     [HttpDelete("{name}")]
     public IActionResult Delete(string name)
     {
-        throw new NotImplementedException();
+        var recipes = new Services.RecipeService();
+        var itExists = recipes.RecipeExists(name);
+        if(itExists) 
+        {
+            recipes.DeleteRecipe(name);
+            return new ObjectResult(name) { StatusCode = StatusCodes.Status204NoContent };
+        }
+        return new ObjectResult(name) { StatusCode = StatusCodes.Status404NotFound };
     }    
 }
