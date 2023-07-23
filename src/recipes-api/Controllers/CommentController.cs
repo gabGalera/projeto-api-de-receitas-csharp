@@ -24,7 +24,9 @@ public class CommentController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody]Comment comment)
     {
-        throw new NotImplementedException();
+        var comments = new Services.CommentService();
+        comments.AddComment(comment);
+        return new ObjectResult(comment) { StatusCode = StatusCodes.Status201Created }; 
     }
 
     // 11 - Sua aplicação deve ter o endpoint GET /comment/:recipeName
