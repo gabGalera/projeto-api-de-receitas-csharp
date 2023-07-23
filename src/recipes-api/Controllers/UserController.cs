@@ -38,16 +38,27 @@ public class UserController : ControllerBase
     [HttpPost]
     public IActionResult Create([FromBody]User user)
     {
-         var users = new Services.UserService();
-         users.AddUser(user);
-         return new ObjectResult(user) { StatusCode = StatusCodes.Status201Created };
+        var users = new Services.UserService();
+        users.AddUser(user);
+        return new ObjectResult(user) { StatusCode = StatusCodes.Status201Created };
     }
 
     // "8 - Sua aplicação deve ter o endpoint PUT /user
     [HttpPut("{email}")]
     public IActionResult Update(string email, [FromBody]User user)
     {
-        throw new NotImplementedException();
+        var users = new Services.UserService();
+        var exists = users.UserExists(email);
+        if (user.Email != email)
+        {
+            return new ObjectResult(user) { StatusCode = StatusCodes.Status400BadRequest };
+        }
+        else if (exists)
+        {
+            return new ObjectResult(user) { StatusCode = StatusCodes.Status200OK };
+        }
+        return new ObjectResult(user) { StatusCode = StatusCodes.Status404NotFound };
+         
     }
 
     // 9 - Sua aplicação deve ter o endpoint DEL /user
